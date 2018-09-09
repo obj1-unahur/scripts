@@ -37,8 +37,9 @@ function cloneOrPullRepo {
 
 }
 
-TOKEN="6d664a928199877599f8a03862ef2512c01b3891"
-URL="https://api.github.com/orgs/obj1-unahur-2018s2/repos?access_token="${TOKEN}"&per_page=200"
+TOKEN=$GITHUB_TOKEN
+ORG=obj1-unahur-2018s2
+URL="https://api.github.com/orgs/$ORG/repos?access_token="${TOKEN}"&per_page=200"
 args=("$@")
 echo Buscando repos para ${args[0]}
 mkdir -p ${args[0]}
