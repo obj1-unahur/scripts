@@ -1,6 +1,6 @@
 # Utilidades
 
-## fix-wollok-projects.sh
+## fix_projects_names.sh
 Este script adapta el nombre del proyecto wollok para que corresponde con el repositorio de git al que pertenece. Esto nos va a permitir poder abrir el mismo ejercicio, por ejemplo pepita, de multiples estudiantes a la vez.
 
 Modo de uso:
