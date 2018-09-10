@@ -22,7 +22,7 @@ function renameWollokProject {
     echo "Project Name is already fixed"
   else
     echo $ORIGINAL_PY_NAME
-    sed "s/$ORIGINAL_PY_NAME/$1/g" .project > .project.TMP
+    sed "s/$ORIGINAL_PY_NAME/$1/g" .project > .project.tmp
     mv .project.tmp .project
     git commit -a -m "Fixing project name"
     echo "Project Name is fixed"
