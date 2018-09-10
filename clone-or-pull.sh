@@ -4,6 +4,8 @@ DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 source "$DIR/common"
 
+[[ -z "$GITHUB_TOKEN" ]] && { echo "GitHub token not found, please ensure it is stored on \$GITHUB_TOKEN variable. You can generate one on https://github.com/settings/tokens, with at least 'repo' scope." ; exit 1; }
+
 function continueToNextPage {
   NEW_COUNT=$(ls -1A . | wc -l)
 
