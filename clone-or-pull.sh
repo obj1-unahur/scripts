@@ -4,6 +4,8 @@ DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 source "$DIR/common"
 
+[[ -z "$GITHUB_TOKEN" ]] && { echo "GitHub token not found, please ensure it is stored on \$GITHUB_TOKEN variable. You can generate one on https://github.com/settings/tokens, with at least 'repo' scope." ; exit 1; }
+
 function continueToNextPage {
   NEW_COUNT=$(ls -1A . | wc -l)
 
@@ -33,7 +35,7 @@ function cloneOrPullRepo {
     echo Cloning $REPO_HOME
     git clone $1
   fi
-  renameWollokProyect $REPO_HOME $TP_NAME
+  renameWollokProject $REPO_HOME $TP_NAME
 
 }
 
@@ -41,7 +43,7 @@ TOKEN=$GITHUB_TOKEN
 ORG=obj1-unahur-2018s2
 URL="https://api.github.com/orgs/$ORG/repos?access_token="${TOKEN}"&per_page=200"
 args=("$@")
-echo Buscando repos para ${args[0]}
+echo Searching repos for ${args[0]}...
 mkdir -p ${args[0]}
 cd ${args[0]}
 PAGE_NUMBER=1

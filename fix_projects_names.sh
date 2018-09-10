@@ -8,5 +8,5 @@ for d in */ ; do
     REPO_HOME=${d:0:${#d}-1}
     REPO_USER=$(echo $REPO_HOME | rev | cut -d'-' -f 1 | rev)
     TP_NAME=$(echo $REPO_HOME | rev | cut -d'-' -f2-  | rev)
-    renameWollokProyect $REPO_HOME $TP_NAME
+    renameWollokProject $REPO_HOME $TP_NAME
 done
