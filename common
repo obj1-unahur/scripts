@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function renameWollokProyect {
+function renameWollokProject {
   echo "Fixing "$REPO_HOME
 
 

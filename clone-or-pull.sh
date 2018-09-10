@@ -35,7 +35,7 @@ function cloneOrPullRepo {
     echo Cloning $REPO_HOME
     git clone $1
   fi
-  renameWollokProyect $REPO_HOME $TP_NAME
+  renameWollokProject $REPO_HOME $TP_NAME
 
 }
 
