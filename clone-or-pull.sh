@@ -43,7 +43,7 @@ TOKEN=$GITHUB_TOKEN
 ORG=obj1-unahur-2018s2
 URL="https://api.github.com/orgs/$ORG/repos?access_token="${TOKEN}"&per_page=200"
 args=("$@")
-echo Buscando repos para ${args[0]}
+echo Searching repos for ${args[0]}...
 mkdir -p ${args[0]}
 cd ${args[0]}
 PAGE_NUMBER=1
