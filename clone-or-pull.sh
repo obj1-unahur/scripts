@@ -6,19 +6,10 @@ source "$DIR/common"
 
 [[ -z "$GITHUB_TOKEN" ]] && { echo "GitHub token not found, please ensure it is stored on \$GITHUB_TOKEN variable. You can generate one on https://github.com/settings/tokens, with at least 'repo' scope." ; exit 1; }
 
-function continueToNextPage {
-  NEW_COUNT=$(ls -1A . | wc -l)
-
-  if [ $REPOS_COUNT -eq $NEW_COUNT ]; then
-    break
-  fi
-
-  REPOS_COUNT=$NEW_COUNT
-  PAGE_NUMBER=$((PAGE_NUMBER + 1))
-}
-
 function cloneOrPullRepo {
   re="^(https|git)(:\/\/|@)([^\/:]+)[\/:]([^\/:]+)\/(.+).git$"
+
+  echo $1
 
   if [[ $1 =~ $re ]]; then
     REPO_HOME=${BASH_REMATCH[5]}
@@ -39,24 +30,37 @@ function cloneOrPullRepo {
 
 }
 
+EMPTY_RESPONSE="[]"
+args=("$@")
 TOKEN=$GITHUB_TOKEN
 ORG=obj1-unahur-2018s2
-URL="https://api.github.com/orgs/$ORG/repos?access_token="${TOKEN}"&per_page=200"
-args=("$@")
-echo Searching repos for ${args[0]}...
-mkdir -p ${args[0]}
-cd ${args[0]}
+URL="https://api.github.com/orgs/$ORG/repos?access_token=${TOKEN}&per_page=200"
+KEY=${args[0]}
+
+echo $URL
+
+echo Searching repos for ${KEY}...
+mkdir -p ${KEY}
+cd ${KEY}
 PAGE_NUMBER=1
 REPOS_COUNT=0
 
 while true ; do
-  for r in $(curl  -s $URL"&page="$PAGE_NUMBER  | grep ssh_url |  grep ${args[0]}   | sed '/[ ]*"ssh_url":/!d;s/[^:]*: "//;s/",$//'); do
+  RESPONSE=$(curl  -s $URL"&page="$PAGE_NUMBER)
+  # If response is [] then finish checking pages
+  if [ "$(sed 's/ //g' <<< "$RESPONSE" | tr -d '\n')" == "$EMPTY_RESPONSE" ]; then
+     break
+  fi
+  PAGE_NUMBER=$((PAGE_NUMBER + 1))
+
+  for r in $( grep ssh_url <<< "$RESPONSE" | grep $KEY | sed '/[ ]*"ssh_url":/!d;s/[^:]*: "//;s/",$//' ); do
     cloneOrPullRepo $r &
   done
 
-  continueToNextPage
 done
 
 wait
+
+REPOS_COUNT=$(ls -1A . | wc -l)
 
 echo $REPOS_COUNT Cloned or updated.
